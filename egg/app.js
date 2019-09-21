@@ -1,3 +1,3 @@
-// module.exports=app=>{
-//     app.config.coreMiddleware.unshift('isLogin')
-// }
+module.exports=app=>{
+    app.config.coreMiddleware.unshift('isLogin')
+}

@@ -15,7 +15,6 @@ export default new Router({
       component: () => import('@/views/Index'),
       beforeEnter(to, from, next) {
         let { token } = window.localStorage;
-     
         if (token && token.split('.').length === 3) {
           next();
         } else {

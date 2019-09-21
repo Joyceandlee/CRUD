@@ -1,8 +1,6 @@
 const Service = require('egg').Service;
 const uuidv4 = require('uuid/v4');
 
-
-
 class HomeService extends Service {
     async login(ctx) {
 
@@ -52,8 +50,9 @@ class HomeService extends Service {
 
     async getList() {
         let listinfo = await this.app.mysql.select("listinfo")
-        console.log(listinfo);
-
+        listinfo.map((item)=>{
+            delete item.password;
+        })
         this.ctx.body = {
             code: 1,
             msg: 'getList success',
@@ -72,9 +71,7 @@ class HomeService extends Service {
                 msg: "add failed",
                 data: "用户名重复！"
             }
-
         } else {
-
             try {
                 await this.app.mysql.insert('listinfo', { name: `${name}`, password: `${password}`, birthday: `${birthday}`, city: `${city}` })
                 return {
@@ -103,10 +100,7 @@ class HomeService extends Service {
     }
 
     async edit(ctx){
-        // let {name,password,birthday,city}=ctx;
         let updateData=await this.app.mysql.update('listinfo',ctx);
-
-        console.log(updateData)
 
         if(updateData){
             return {

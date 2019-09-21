@@ -46,7 +46,6 @@ export default {
                 type: "success"
               });
               window.localStorage.token = res.data.token;
-             
               setTimeout(() => {
                 this.$router.push({ path: "/index" });
               }, 1000);

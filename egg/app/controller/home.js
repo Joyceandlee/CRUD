@@ -63,7 +63,7 @@ class HomeController extends Controller {
     await this.ctx.service.home.registry(ctx.request.body)
   }
 
-  async getList(ctx) {
+  async getList() {
     await this.ctx.service.home.getList()
   }
 

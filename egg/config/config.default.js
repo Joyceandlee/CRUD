@@ -5,12 +5,15 @@
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
+
+const white = require('./white')
 module.exports = appInfo => {
   /**
    * built-in config
    * @type {Egg.EggAppConfig}
    **/
-  const config = exports = {};
+  const config = exports = {
+  };
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1568853756738_7011';
@@ -44,8 +47,11 @@ module.exports = appInfo => {
     // 是否加载到 agent 上，默认关闭
     agent: false,
   };
+
+  config.white = white
   return {
     ...config,
     ...userConfig,
   };
 };
+

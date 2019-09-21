@@ -37,7 +37,6 @@
         </template>
       </el-table-column>
     </el-table>
-    
 
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <el-form
@@ -48,13 +47,13 @@
         class="demo-ruleForm"
       >
         <el-form-item label="姓名" prop="pass">
-          <el-input  v-model="ruleForm.name" autocomplete="off"></el-input>
+          <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="checkPass">
           <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="生日" prop="checkPass">
-          <el-input  v-model="ruleForm.birthday" autocomplete="off"></el-input>
+          <el-input v-model="ruleForm.birthday" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="城市" prop="age">
           <el-input v-model="ruleForm.city"></el-input>
@@ -75,46 +74,59 @@ exports.default = {
   data() {
     return {
       tableData: [],
-       dialogVisible: false,
-      ruleForm:{
-        name:'',
-        password:'',
-        birthday:'',
-        city:''
+      dialogVisible: false,
+      ruleForm: {
+        name: "",
+        password: "",
+        birthday: "",
+        city: ""
       }
     };
   },
   created() {
-    this.$axios.post("/api/getlist").then(res => {
-      if (res.data.code === 1) {
-        this.tableData = res.data.listinfo;
-      }
-    });
+    this.$axios
+      .post(
+        "/api/getlist",
+        {},
+        {
+          headers: {
+            token: window.localStorage.token
+          }
+        }
+      )
+      .then(res => {
+        if (res.data.code === 1) {
+          this.tableData = res.data.listinfo;
+        }
+      });
   },
   methods: {
-    editUser(){
-      this.dialogVisible=false;
-
-      console.log(this.ruleForm)
-
-      this.$axios.post('/api/edit',this.ruleForm)
-      .then(res=>{
-        console.log(res)
-      })
-      .catch(err=>{
-        console.log(err.response.data)
-      })
+    editUser() {
+      this.dialogVisible = false;
+      console.log(this.ruleForm);
+      this.$axios
+        .post("/api/edit", this.ruleForm, {
+          headers: {
+            token: window.localStorage.token
+          }
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+                this.$message({
+                  type: "success",
+                  message: "编辑成功!"
+                });
+              }
+        })
+        .catch(err => {
+         this.$message.error(res.response.data.msg)
+        });
     },
     handleEdit(index, row) {
-      this.dialogVisible = true
-      console.log(index, row);
-      // let {name,password,city,birthday}=row;
-      this.ruleForm=row;
-      
+      this.dialogVisible = true;
+      this.ruleForm = row;
     },
     handleDelete(index, row) {
-      console.log(index, row.id);
-
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -122,18 +134,24 @@ exports.default = {
         center: true
       })
         .then(() => {
-          this.$axios.delete("/api/delete?id="+row.id).then(res => {
-            console.log(res);
-            if (res.data.code == 1) {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-            }
-            this.$router.go(0)
-          }).catch(err=>{
-            console.log(err.reponse.data)
-          })
+          this.$axios
+            .delete("/api/delete?id=" + row.id, {
+              headers:{
+                token:window.localStorage.token
+              }
+            })
+            .then(res => {
+              if (res.data.code == 1) {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+              }
+              this.$router.go(0);
+            })
+            .catch(err => {
+              this.$message.error(res.response.data.msg)
+            });
         })
         .catch(() => {
           this.$message({

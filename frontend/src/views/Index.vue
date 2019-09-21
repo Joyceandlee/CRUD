@@ -88,9 +88,12 @@ exports.default = {
     addUser() {
       this.dialogVisible = false;
       console.log(this.ruleForm)
-      this.$axios.post('/api/add',this.ruleForm)
+      this.$axios.post('/api/add',this.ruleForm,{
+        headers:{
+          token:window.localStorage.token
+        }
+      })
       .then(res=>{
-        // console.log()
         if(res.data.code==1){
           this.$message.success(res.data.msg)
           this.$router.go(0)
@@ -98,7 +101,6 @@ exports.default = {
           this.$message.error(res.response.data.msg)
         }
       })
-    // console.log(JSON.parse(JSON.stringify(this.ruleForm)))
     }
   }
 };
@@ -114,7 +116,6 @@ h3 {
 }
 .addbtn {
   display: inline-block;
-  /* margin-left: 80px; */
   position: absolute;
   right: 30px;
   top: 15px;
